@@ -13,6 +13,7 @@ include 'Formats/JSON.php';
 class Converter{
     
     private $data;
+    private $convertedData;
     public function __construct($data) {
         $this->data = $data;
 #        $this->toFormat = $toFormat;
@@ -31,8 +32,8 @@ class Converter{
                     break;
                 
                 case 'json':
-                    $newFile = json_encode($this->data);
-                    return $newFile;
+                    $this->convertedData = json_encode($this->data);
+                    return $this->convertedData;
                     break;
                 
                  case 'csv':

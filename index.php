@@ -1,10 +1,11 @@
 <?php
-require 'Converter/Converter.php';
+require __DIR__ . '/vendor/autoload.php';
 
+require 'Converter/Converter.php';
 ?>
 <html>
     <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />        
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />        
     </head>
     <body>
         <form method="post" enctype="multipart/form-data">
@@ -20,19 +21,25 @@ require 'Converter/Converter.php';
             $file = $_FILES;
             var_dump($_FILES);
             $uploads_dir = '/var/www/html/converter/upload';
-            
+            $convertTo = $_POST['convertTo'];
             //WALIDACJA
             $file = $_FILES;
             #$plikXML = simplexml_load_file($file['uploadFile']['tmp_name']);
             $uploadFileExt = pathinfo($file['uploadFile']['name'], PATHINFO_EXTENSION);
-            echo '<h1>',$uploadFileExt,'</h1>';
+            echo '<h1>Załadowano plik z roszerzeniem',$uploadFileExt,'</h1>';
+            echo '<h2>Wybrano jako format wyjściowy: '.$convertTo.'</h2>';
             
-
 //Czyta plik
             switch ($uploadFileExt)
             {
                 case 'xml':
+                    $file_data = simplexml_load_file($file['uploadFile']['tmp_name']);
+                    $converted_data = json_encode($file_data);
+                    $convertThisFile = new Converter($file_data);
+                    print_r($convertThisFile->convert($convertTo));
+                    
                     echo '<pre>', print_r(simplexml_load_file($file['uploadFile']['tmp_name'])),'</pre>'; 
+      #              echo '<pre>', print_r($converted_data),'</pre>'; 
                     break;
                 case 'json':
                     $json = file_get_contents($file['uploadFile']['tmp_name']);
@@ -51,9 +58,6 @@ require 'Converter/Converter.php';
                      $line_of_text;
                     break;
         }
-        
-
-            
 } 
         #move_uploaded_file($tmp_name, "$uploads_dir/$name");
         ;?>
