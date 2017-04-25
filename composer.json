@@ -1,0 +1,14 @@
+{
+    "name": "hubert/converter",
+    "description": "Convert XML/JSON/CSV",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "HubertKotarski",
+            "email": "hubertkotkom@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^5.6 || ^7.0"
+    }
+}
