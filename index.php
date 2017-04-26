@@ -1,4 +1,10 @@
 <?php
+
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 require __DIR__ . '/vendor/autoload.php';
 
 require 'Converter/Converter.php';
@@ -19,13 +25,14 @@ require 'Converter/Converter.php';
         
         <?php if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $file = $_FILES;
-            var_dump($_FILES);
+            #var_dump($_FILES);
             $uploads_dir = '/var/www/html/converter/upload';
             $convertTo = $_POST['convertTo'];
             //WALIDACJA
             $file = $_FILES;
             #$plikXML = simplexml_load_file($file['uploadFile']['tmp_name']);
             $uploadFileExt = pathinfo($file['uploadFile']['name'], PATHINFO_EXTENSION);
+            $uploadFile = file_get_contents($file['uploadFile']['tmp_name']);
             echo '<h1>Załadowano plik z roszerzeniem',$uploadFileExt,'</h1>';
             echo '<h2>Wybrano jako format wyjściowy: '.$convertTo.'</h2>';
             
@@ -33,30 +40,68 @@ require 'Converter/Converter.php';
             switch ($uploadFileExt)
             {
                 case 'xml':
-                    $file_data = simplexml_load_file($file['uploadFile']['tmp_name']);
-                    $converted_data = json_encode($file_data);
-                    $convertThisFile = new Converter($file_data);
-                    print_r($convertThisFile->convert($convertTo));
-                    
-                    echo '<pre>', print_r(simplexml_load_file($file['uploadFile']['tmp_name'])),'</pre>'; 
-      #              echo '<pre>', print_r($converted_data),'</pre>'; 
-                    break;
+                       $decoders = array(new XmlEncoder(), new JsonEncoder());
+            $normalizer = array(new ObjectNormalizer());
+             $plik = new Serializer($normalizer, $decoders);
+             
+                    $xmlDecoder = new XmlEncoder();
+                    $jsonDecoder = new JsonEncoder();
+                    $csvDecoder = new CsvEncoder();
+                    $fileDecoded = $xmlDecoder->decode($uploadFile, 'xml');
+                    $file_return = $jsonDecoder->encode($fileDecoded, 'json');
+                    $file_return2 = $csvDecoder->encode($fileDecoded, 'csv');
+ #                   echo '<pre>', print_r($jsonDecoder->decode($uploadFile, 'xml')),'</pre>';
+                    echo '<pre>', print_r($xmlDecoder->decode($uploadFile, 'xml')),'</pre>';
+                    echo '<pre>', print_r($file_return),'</pre>';
+                    echo '<pre>', print_r($file_return2),'</pre>';
+                    echo 'Line by line 1';
+                    #print_r($uploadFile);
+                    echo '<br/>--------</br>';
+                    echo 'Line by line 3';
+                   
                 case 'json':
-                    $json = file_get_contents($file['uploadFile']['tmp_name']);
-                    $data = json_decode($json, true);
-                    echo '<pre>', print_r($data),'</pre>'; 
-                    break;
+                       $decoders = array(new XmlEncoder(), new JsonEncoder());
+            $normalizer = array(new ObjectNormalizer());
+             $plik = new Serializer($normalizer, $decoders);
+             
+                    $xmlDecoder = new XmlEncoder();
+                    $jsonDecoder = new JsonEncoder();
+                    $csvDecoder = new CsvEncoder();
+                    print_r($uploadFile);
+                    $fileDecoded = $jsonDecoder->decode($uploadFile, 'json');
+                    print_r($fileDecoded);
+                    $file_return = $xmlDecoder->encode($fileDecoded, 'xml');
+                     $przemieniony = fopen('przemieniony.xml', 'w');
+                    fwrite($przemieniony, $file_return);
+                    $file_return2 = $csvDecoder->encode($fileDecoded, 'csv');
+ #                   echo '<pre>', print_r($jsonDecoder->decode($uploadFile, 'xml')),'</pre>';
+#                   echo '<pre>', $file_return,'</pre>';
+                    echo '<pre>', $file_return2,'</pre>';
+                   
+                    echo 'Line by line 1';
+                    #print_r($uploadFile);
+                    echo '<br/>--------</br>';
+                    echo 'Line by line 3';
                 case 'csv':
-                    echo 'To jest plik CSV!';
-                    $csvFile = $file['uploadFile']['tmp_name'];
-                    $file_handle = fopen($csvFile, 'r');
-                    while (!feof($file_handle) ) {
-                        $line_of_text[] = fgetcsv($file_handle, 1024);
-                    }
-                    fclose($file_handle);
-                    echo '<pre>', print_r($line_of_text),'</pre>'; 
-                     $line_of_text;
-                    break;
+                       $decoders = array(new XmlEncoder(), new JsonEncoder());
+            $normalizer = array(new ObjectNormalizer());
+             $plik = new Serializer($normalizer, $decoders);
+             
+                    $xmlDecoder = new XmlEncoder();
+                    $jsonDecoder = new JsonEncoder();
+                    $csvDecoder = new CsvEncoder();
+                    $fileDecoded = $csvDecoder->decode($uploadFile, 'csv');
+                    $file_return = $jsonDecoder->encode($fileDecoded, 'json');
+                    $file_return2 = $xmlDecoder->encode($fileDecoded, 'xml');
+ #                   echo '<pre>', print_r($jsonDecoder->decode($uploadFile, 'xml')),'</pre>';
+                     $przemieniony = fopen('przemieniony.json', 'w');
+                    fwrite($przemieniony, $file_return);
+                    echo '<pre>', print_r($file_return),'</pre>';
+                    echo '<pre>', print_r($file_return2),'</pre>';
+                    echo 'Line by line 1';
+                    #print_r($uploadFile);
+                    echo '<br/>--------</br>';
+                    echo 'Line by line 3';
         }
 } 
         #move_uploaded_file($tmp_name, "$uploads_dir/$name");
