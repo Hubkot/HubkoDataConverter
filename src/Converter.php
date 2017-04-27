@@ -100,7 +100,7 @@ class Converter{
     }
     /**
      * Used in console to proced whole path to file and saves encoded data into the file.
-     * @param string $pathName,
+     * @param string $pathName, 
      * @param string $convertTo is the extension of the saved file
      * @return 
      */
