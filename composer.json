@@ -10,12 +10,14 @@
     ],
     "autoload": {
         "psr-4": {
-            "Symfony\\Component\\Serializer\\": ""
+            "Symfony\\Component\\Serializer\\": "",
+            "Converter\\": "src/"
         }
     },
     "require": {
         "php": "^5.6 || ^7.0",
         "symfony/serializer": "^3.2",
-        "symfony/property-access": "^3.2"
+        "symfony/property-access": "^3.2",
+        "symfony/console": "^3.2"
     }
 }

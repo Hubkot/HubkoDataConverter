@@ -1,5 +1,5 @@
 <?php
-namespace Converter\Converter;
+namespace Converter;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -93,6 +93,14 @@ class Converter{
      */
     public function saveToFile($filename,$convertTo)
     {
+        $encodedFile = fopen('./web/'.$filename.'.'.$convertTo, 'w');
+        fwrite($encodedFile,$this->dataEncoded);
+        fclose($encodedFile);
+        return;
+    }
+    public function saveWithLongPathName($pathName,$convertTo)
+    {
+        $filename = end(explode('/', $pathName));
         $encodedFile = fopen('./web/'.$filename.'.'.$convertTo, 'w');
         fwrite($encodedFile,$this->dataEncoded);
         fclose($encodedFile);
