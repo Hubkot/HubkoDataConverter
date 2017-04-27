@@ -1,0 +1,4 @@
+debug,window.@title,window.name,window.width,window.height,image.@src,image.@name,image.hOffset,image.vOffset,image.alignment,text.@data,text.@size,text.@style,text.name,text.hOffset,text.vOffset,text.alignment,text.onMouseUp
+on,"Sample Konfabulator Widget",main_window,500,500,Images/Sun.png,sun1,250,250,center,"Click Here",36,bold,text1,250,100,center,"
+            sun1.opacity = (sun1.opacity / 100) * 90;
+        "
