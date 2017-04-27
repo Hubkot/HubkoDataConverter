@@ -46,13 +46,14 @@ class ConvertCommand extends Command{
         $file_extension = $input->getArgument('file-extension');
         $convert_to = $input->getArgument('convert-to');
         
-        $output->writeln('I am trying convert the file');
+        $output->writeln('Trying to init Converter object ...');
         $convertionTool = new Converter(file_get_contents($filepath), $file_extension);
         $convertionTool->decodeData($file_extension);
+        $output->writeln('Object created. File decoded...');
         $convertionTool->encodeData($convert_to);
+        $output->writeln('Data encoded into the new format.');
         $convertionTool->saveWithLongPathName($filepath, $convert_to);
-        $output->writeln('Probuje zmienic plik: '.$filepath.'na ten nowy format '.$convert_to);
-
+        $output->writeln('File saved in the ./web folder.');
         return 0;
     }
 }

@@ -100,7 +100,8 @@ class Converter{
     }
     public function saveWithLongPathName($pathName,$convertTo)
     {
-        $filename = end(explode('/', $pathName));
+        $arr = explode('/', $pathName);
+        $filename = $arr[count($arr)-1];
         $encodedFile = fopen('./web/'.$filename.'.'.$convertTo, 'w');
         fwrite($encodedFile,$this->dataEncoded);
         fclose($encodedFile);
