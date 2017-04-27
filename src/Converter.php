@@ -98,6 +98,12 @@ class Converter{
         fclose($encodedFile);
         return;
     }
+    /**
+     * Used in console to proced whole path to file and saves encoded data into the file.
+     * @param string $pathName,
+     * @param string $convertTo is the extension of the saved file
+     * @return 
+     */
     public function saveWithLongPathName($pathName,$convertTo)
     {
         $arr = explode('/', $pathName);
